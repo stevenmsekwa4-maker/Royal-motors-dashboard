@@ -25,7 +25,7 @@ const EMPTY: CarInput = {
 }
 
 const MAX_PHOTOS = 12
-const MAX_MB = 8
+const MAX_MB = 5
 
 export function CarEditor({
   open,
