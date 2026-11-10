@@ -7,8 +7,12 @@ import { createClient, type SupabaseClient } from '@supabase/supabase-js'
 
 export const PHOTO_BUCKET = 'car-photos'
 
-const url = import.meta.env.VITE_SUPABASE_URL as string | undefined
-const anonKey = import.meta.env.VITE_SUPABASE_ANON_KEY as string | undefined
+// Keep the admin dashboard pointed at the exact same Supabase project and
+// public publishable key as the customer website. This key is intentionally
+// public; database access is still restricted by the existing RLS policies.
+// Never replace this with a service_role or secret key.
+const url = 'https://mlzedoeetcwevbtnhrnp.supabase.co'
+const anonKey = 'sb_publishable_vaRWxPq6AjwDC862W-xL5g_C3v686hs'
 
 export const SUPABASE_URL = url?.replace(/\/+$/, '') ?? ''
 
