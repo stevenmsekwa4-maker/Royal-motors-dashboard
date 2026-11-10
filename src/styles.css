@@ -1,0 +1,79 @@
+@import 'tailwindcss' source('../');
+
+@theme {
+  --font-display: 'Cinzel', 'Times New Roman', serif;
+  --font-sans: 'Manrope', system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+  --color-ink-950: #07090e;
+  --color-ink-900: #0b0f17;
+  --color-ink-800: #121826;
+  --color-ink-700: #1b2333;
+  --color-ink-600: #283246;
+  --color-ink-500: #3a465e;
+
+  --color-gold-50: #fbf6e9;
+  --color-gold-100: #f4e8c6;
+  --color-gold-300: #e3c77d;
+  --color-gold-400: #d4af5a;
+  --color-gold-500: #c19a3e;
+  --color-gold-600: #a07c2c;
+  --color-gold-700: #7a5d20;
+
+  --color-paper: #f6f4ef;
+}
+
+html,
+body {
+  @apply m-0 bg-paper text-ink-900 font-sans;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.gold-text {
+  background: linear-gradient(120deg, #f4e8c6 0%, #d4af5a 45%, #a07c2c 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Component classes live in the components layer so utilities (pl-9, sm:w-44…) can override them. */
+@layer components {
+  .field {
+    @apply w-full rounded-lg border border-ink-900/15 bg-white px-3 py-2.5 text-sm text-ink-900 outline-none transition placeholder:text-ink-500/60 focus:border-gold-500 focus:ring-2 focus:ring-gold-400/30;
+  }
+
+  .label {
+    @apply mb-1.5 block text-xs font-semibold uppercase tracking-wider text-ink-500;
+  }
+
+  .btn-gold {
+    @apply inline-flex items-center justify-center gap-2 rounded-lg bg-gold-500 px-4 py-2.5 text-sm font-bold text-ink-950 shadow-sm transition hover:bg-gold-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-500 disabled:opacity-50;
+  }
+
+  .btn-ghost {
+    @apply inline-flex items-center justify-center gap-2 rounded-lg border border-ink-900/15 bg-white px-4 py-2.5 text-sm font-semibold text-ink-800 transition hover:border-ink-900/30 hover:bg-ink-900/[0.03] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-500;
+  }
+
+  .card {
+    @apply rounded-2xl border border-ink-900/[0.07] bg-white shadow-[0_1px_2px_rgba(11,15,23,0.04),0_8px_24px_-12px_rgba(11,15,23,0.12)];
+  }
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.rise {
+  animation: rise 0.45s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+@media (prefers-reduced-motion: reduce) {
+  .rise {
+    animation: none;
+  }
+}
