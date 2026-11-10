@@ -91,7 +91,7 @@ function SignIn() {
       {/* Showcase panel */}
       <section className="relative hidden overflow-hidden bg-ink-950 lg:block">
         <img
-          src={photoSrc('/img/car-suv.png', 1400)}
+          src={photoSrc('https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?auto=format&fit=crop&w=1400&q=85', 1400)}
           alt=""
           className="absolute inset-0 h-full w-full object-cover opacity-70"
         />
@@ -120,7 +120,7 @@ function SignIn() {
       <section className="relative flex flex-col justify-center bg-ink-900 px-6 py-12 sm:px-12 lg:bg-paper">
         <div className="absolute inset-0 overflow-hidden lg:hidden" aria-hidden="true">
           <img
-            src={photoSrc('/img/car-suv.png', 900)}
+            src={photoSrc('https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?auto=format&fit=crop&w=900&q=85', 900)}
             alt=""
             className="h-72 w-full object-cover opacity-40"
           />
