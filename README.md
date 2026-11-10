@@ -1,47 +1,59 @@
 # ROYAL MOTORS — Admin Dashboard
 
-A private, mobile-friendly admin console for ROYAL MOTORS (Tanzania). Admins
-use it to manage car listings, prices, photos, and customers. It is a
-**separate project** from the customer website (https://royal-motor.netlify.app/)
-and never deploys to or modifies it.
+A private, mobile-friendly admin console for ROYAL MOTORS in Tanzania. It is a separate project from the public customer website: https://royal-motor.netlify.app/.
 
-## What's live
+## Features
 
-- **Sign in** (`/`): branded admin sign-in. In preview mode, any email and a
-  password of 6 or more characters open the dashboard.
-- **Overview** (`/dashboard`): stock KPIs, recent cars, a status breakdown,
-  and the latest leads.
-- **Cars** (`/cars`): add, edit, and delete cars; upload multiple photos and
-  pick the cover; set a price or "Ask for Price"; set the status and the
-  featured flag.
-- **Customers** (`/customers`): track leads and buyers, filter by status,
-  reply on WhatsApp, and add, edit, or delete customers.
+- Secure Supabase email/password sign-in; only users whose `profiles.role` is `admin` can enter.
+- Overview of inventory and customer enquiries.
+- Add, edit, publish, reserve, mark sold, and delete vehicles.
+- Upload and manage up to 12 vehicle photos in Supabase Storage.
+- Manage customer leads and open WhatsApp conversations.
+- Responsive desktop and Android/mobile layouts.
 
-The dashboard currently runs on realistic sample data (`src/lib/fixtures.ts`).
-Changes stay in memory and reset on reload until the Supabase connection is
-added.
+All inventory and customer records are loaded from Supabase. There is no sample-data fallback.
 
-## Tech
+## Supabase configuration
 
-- TanStack Start (React 19) with file-based routes
-- Tailwind CSS v4, with the theme in `src/styles.css`
-- lucide-react icons
-- Netlify hosting, with the Netlify Image CDN for car photos
-- Planned: Supabase (Postgres, Auth, Storage)
+This dashboard uses the existing project:
+
+- Project URL: `https://mlzedoeetcwevbtnhrnp.supabase.co`
+- Project ref: `mlzedoeetcwevbtnhrnp`
+
+Set these environment variables in Netlify (and in a local `.env` file):
+
+- `VITE_SUPABASE_URL` — the project URL above.
+- `VITE_SUPABASE_ANON_KEY` — the project's public publishable key (or legacy anon key).
+
+A template is provided in `.env.example`. The public key is intended for browser use and must be protected by RLS. **Never put a Supabase service-role or secret key in a `VITE_*` variable or browser code.**
+
+## One-time database setup
+
+The database setup scripts are in `supabase/`:
+
+1. Run `supabase/inspect.sql` in the Supabase SQL Editor first. It is read-only; review the existing policies, grants, columns and storage configuration.
+2. Review `supabase/setup.sql`. It adds the fields and security rules required by this dashboard, preserves existing data and non-Royal-Motors policies, creates the read-only `public_cars` view, and configures the `car-photos` bucket policies. Run it only after reviewing the inspection results.
+3. Create the owner's user in Supabase Authentication, then set that user's `public.profiles.role` to `admin` using the SQL comment at the end of `supabase/setup.sql`. The project currently has one admin profile; verify that it belongs to the intended owner before signing in.
+
+The dashboard and customer website both use `public.cars` as the source of vehicle records. The customer website reads only public statuses; customer records remain admin-only.
 
 ## Run locally
 
+Requires Node.js 24 (or a supported current Node version) and pnpm.
+
 ```bash
 pnpm install
-netlify dev        # or: pnpm dev
+pnpm dev
 ```
 
-## Roadmap
+Useful checks:
 
-See [PLAN.md](./PLAN.md):
+```bash
+pnpm typecheck
+pnpm test
+pnpm build
+```
 
-1. Supabase data model
-2. Secure admin login
-3. Photo uploads to Supabase Storage
-4. Customer website connection
-5. Polish and operations
+## Deployment
+
+Deploy this repository as its own private admin site. Do not connect its build to, replace, or deploy over the customer website. Configure the two `VITE_SUPABASE_*` variables in the admin site's Netlify environment before its first deployment.
