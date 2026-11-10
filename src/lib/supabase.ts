@@ -39,7 +39,7 @@ interface DbErrorLike {
   status?: number
 }
 
-const SETUP_HINT = 'Run supabase/setup.sql in the Supabase SQL Editor.'
+const SETUP_HINT = 'Review the existing Supabase RLS and Storage policies; do not run setup.sql blindly.'
 
 /** Turn Supabase/PostgREST/network errors into a clear message for admins. */
 export function describeError(err: unknown): string {
