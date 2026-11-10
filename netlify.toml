@@ -1,0 +1,23 @@
+[build]
+  command = "vite build"
+  publish = "dist/client"
+[build.environment]
+  NODE_VERSION = "24"
+[dev]
+  framework = "#custom"
+  command = "npm run dev"
+  targetPort = 3000
+  port = 8888
+
+# Let the Netlify Image CDN resize car photos stored in Supabase Storage.
+[images]
+  remote_images = ["https://[a-z0-9-]+\\.supabase\\.co/storage/v1/object/public/car-photos/.*"]
+
+# Private admin console: keep it out of search engines and other sites' frames.
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow"
+    X-Frame-Options = "DENY"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
