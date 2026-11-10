@@ -1,7 +1,7 @@
 /**
  * Browser Supabase client. It uses only the public anon key. Every read and
  * write is checked by Row Level Security in the database (see
- * supabase/setup.sql). The service role key is never used in this app.
+ * the existing live RLS policies). The service role key is never used in this app.
  */
 import { createClient, type SupabaseClient } from '@supabase/supabase-js'
 
