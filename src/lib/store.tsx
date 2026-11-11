@@ -88,7 +88,12 @@ export function InventoryProvider({ children }: { children: ReactNode }) {
       if (!data) {
         throw new Error('This car was not saved. It may have been deleted, or your account isn’t allowed to edit it.')
       }
-      const saved = rowToCar(data)
+      // Read the row back from Supabase before reporting success. This
+      // prevents the admin UI from treating an in-memory update as a saved car.
+      const verifiedRow = check(
+        await sb.from('cars').select('*').eq('id', str(data.id)).single(),
+      )
+      const saved = rowToCar(verifiedRow)
       setCars((prev) =>
         id ? prev.map((c) => (c.id === id ? saved : c)) : [saved, ...prev],
       )
