@@ -91,7 +91,7 @@ export function InventoryProvider({ children }: { children: ReactNode }) {
       // Read the row back from Supabase before reporting success. This
       // prevents the admin UI from treating an in-memory update as a saved car.
       const verifiedRow = check(
-        await sb.from('cars').select('*').eq('id', str(data.id)).single(),
+        await sb.from('cars').select('*').eq('id', String(data.id)).single(),
       )
       const saved = rowToCar(verifiedRow)
       setCars((prev) =>
