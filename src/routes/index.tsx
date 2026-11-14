@@ -3,7 +3,7 @@ import { useEffect, useState, type FormEvent } from 'react'
 import { Eye, EyeOff, Lock, Mail, ShieldCheck } from 'lucide-react'
 import { Logo } from '../components/ui'
 import { photoSrc } from '../lib/format'
-import { checkAdminCached, sendPasswordReset, signInAdmin } from '../lib/auth'
+import { checkAdminCached, sendAdminMagicLink, sendPasswordReset, signInAdmin } from '../lib/auth'
 import { describeError } from '../lib/supabase'
 
 type SignInSearch = { reason?: 'not-admin' | 'error' | 'reset'; message?: string }
@@ -66,6 +66,23 @@ function SignIn() {
       setError(result.reason === 'not-admin' ? NOT_ADMIN : (result.message ?? 'Sign-in failed.'))
     } catch (err) {
       setError(describeError(err))
+    }
+    setBusy(false)
+  }
+
+  const onMagicLink = async () => {
+    if (!email.includes('@')) {
+      setError('Enter the authorized admin email first.')
+      return
+    }
+    setError(null)
+    setInfo(null)
+    setBusy(true)
+    try {
+      await sendAdminMagicLink(email.trim())
+      setInfo('If this email belongs to an existing admin account, a secure sign-in link has been sent. Check your inbox and spam folder.')
+    } catch (err) {
+      setError(err instanceof Error ? err.message : describeError(err))
     }
     setBusy(false)
   }
@@ -198,6 +215,14 @@ function SignIn() {
 
               <button type="submit" className="btn-gold w-full py-3" disabled={busy}>
                 {busy ? 'Signing in…' : 'Sign in to dashboard'}
+              </button>
+              <button
+                type="button"
+                onClick={() => void onMagicLink()}
+                disabled={busy}
+                className="block w-full rounded-xl border border-gold-500/40 py-3 text-center text-sm font-semibold text-gold-700 hover:bg-gold-50"
+              >
+                {busy ? 'Please wait…' : 'Email me a secure sign-in link'}
               </button>
               <button
                 type="button"
