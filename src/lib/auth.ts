@@ -76,6 +76,18 @@ export async function signInAdmin(email: string, password: string): Promise<Admi
   return check
 }
 
+/** Send a one-time, passwordless sign-in link to an existing admin only. */
+export async function sendAdminMagicLink(email: string) {
+  const { error } = await getSupabase().auth.signInWithOtp({
+    email,
+    options: {
+      shouldCreateUser: false,
+      emailRedirectTo: `${window.location.origin}/dashboard`,
+    },
+  })
+  if (error) throw new Error(describeError(error))
+}
+
 export async function signOutAdmin() {
   clearAdminCache()
   try {
